@@ -1,0 +1,11 @@
+// Phase 1 — Foundation & Data Layer
+// Data model (Machine, AuditLog) to be added here per SDD Section 3.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
