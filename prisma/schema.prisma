@@ -1,11 +1,33 @@
-// Phase 1 — Foundation & Data Layer
-// Data model (Machine, AuditLog) to be added here per SDD Section 3.
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+}
+
+model Machine {
+  id                  String     @id @default(uuid())
+  name                String     @unique
+  description         String?
+  status              String     @default("active")
+  clientId            String     @unique
+  secretHash          String
+  allowedScopes       String
+  createdAt           DateTime   @default(now())
+  lastAuthenticatedAt DateTime?
+  auditLogs           AuditLog[]
+}
+
+model AuditLog {
+  id             String   @id @default(uuid())
+  eventType      String
+  outcome        String
+  reason         String?
+  requestedScope String?
+  sourceIp       String?
+  jti            String?
+  timestamp      DateTime @default(now())
+  machineId      String?
+  machine        Machine? @relation(fields: [machineId], references: [id])
 }
